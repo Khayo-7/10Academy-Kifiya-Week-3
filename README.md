@@ -1,1 +1,2 @@
-# Khayo-7-10Academy-Kifiya-Week-3
+# AlphaCare Risk Analysis
+A project for analyzing insurance claim data to optimize marketing strategies.
