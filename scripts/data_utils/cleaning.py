@@ -1,10 +1,12 @@
 import pandas as pd
 
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Handle missing values and format data."""
 
     data['TransactionMonth'] = pd.to_datetime(data['TransactionMonth'])
-    data = data.applymap(lambda x: x.replace(' ', '') if isinstance(x, str) else x)
-
+    data = data.map(lambda x: x.replace(' ', '') if isinstance(x, str) else x)
+    data['Gender'] = data['Gender'].replace(pd.NA, 'Notspecified')
+    data = data.dropna(subset=["Province", "PostalCode", "TotalClaims", "TotalPremium"])
     return data
 
 def validate_data_types(data):

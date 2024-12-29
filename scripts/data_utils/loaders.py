@@ -25,3 +25,6 @@ def summarize_data(data: pd.DataFrame):
     print((data.isnull().sum() > 0).sum())
     print("\n--- Missing Values ---")
     print(data.isnull().sum())
+
+def save_data(dataframe, output_path):
+    dataframe.to_csv(output_path, index=False)
