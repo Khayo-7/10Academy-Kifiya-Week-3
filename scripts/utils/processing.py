@@ -43,3 +43,33 @@ def generate_contingency_table(df, column1, column2, threshold=0):
     - pd.DataFrame: A contingency table showing the frequency of each combination of values in column1 and column2.
     """
     return pd.crosstab(df[column1], df[column2] > threshold)
+
+def segment_data(data, column, values_group_a, values_group_b):
+    """
+    Segment data into control (Group A) and test (Group B) for comparison.
+    """
+
+    # group_a = data[data[column] == value_a]
+    # group_b = data[data[column] == value_b]
+    group_a = data[data[column].isin(values_group_a)]
+    group_b = data[data[column].isin(values_group_b)]
+
+    return group_a, group_b
+
+def aggregate_by_group(data, group_column, metrics):
+    """
+    Aggregate data by group and calculate the provided metrics.
+    """
+
+    data = data.copy()
+    return data.groupby(group_column)[metrics].agg(["sum", "mean"]).reset_index()
+
+def compute_metric(data, column, condition, metric_col, operation='mean'):
+    """
+    Compute a metric for a subset of data based on a condition.
+    """
+    subset = data[data[column] == condition]
+    if operation == 'mean':
+        return subset[metric_col].mean()
+    elif operation == 'sum':
+        return subset[metric_col].sum()
