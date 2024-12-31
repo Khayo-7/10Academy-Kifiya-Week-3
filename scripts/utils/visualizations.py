@@ -1,6 +1,9 @@
-import matplotlib as plt
-import seaborn as sns
+# import matplotlib as plt
 import matplotlib.pyplot as plt
+import seaborn as sns
+import missingno as msno
+import xgboost as xgb
+from sklearn.tree import plot_tree
 
 def plot_distribution(data, column: str, save_path=None):
     """Plots a histogram with KDE for a given column."""
@@ -121,3 +124,49 @@ def bubble_chart(data, x, y, size, hue, title, save_path=None):
         plt.savefig(save_path)
     plt.show()
 
+# Visualize a single tree with limited depth
+def visualize_rf_tree(forest_model, feature_names, tree_index=0, max_depth=4):
+    """
+    Visualize a single tree with a limited depth from the Random Forest model.
+
+    Args:
+    - forest_model: The trained Random Forest model.
+    - feature_names: List of feature names.
+    - tree_index: Index of the tree to visualize.
+    - max_depth: Maximum depth of the tree to display.
+    """
+    tree = forest_model.estimators_[tree_index]
+    plt.figure(figsize=(20, 10))
+    plot_tree(tree, feature_names=feature_names, max_depth=max_depth, filled=True, rounded=True, fontsize=10)
+    plt.title(f"Tree {tree_index} from the Random Forest (Max Depth: {max_depth})")
+    plt.show()
+
+def visualize_xgb_tree(xgb_model, tree_index=0):
+    """
+    Visualize a specific tree from the XGBoost model.
+
+    Args:
+        xgb_model: The trained XGBoost model.
+        tree_index (int): Index of the tree to visualize.
+    """
+    plt.figure(figsize=(20, 10))
+    xgb.plot_tree(xgb_model, num_trees=tree_index)
+    plt.show()
+
+def visualize_missing_data(data):
+    """
+    Visualize missing data in a dataset.
+
+    Args:
+        data (pd.DataFrame): Input dataset.
+    """
+
+    msno.matrix(data, figsize=(10, 6), color=(0.25, 0.5, 0.9))  # Adjust size and color
+    plt.title("Missing Data Visualization", fontsize=16)
+
+    plt.xticks(
+        range(data.shape[1]),
+        data.columns,
+        rotation=90, fontsize=10
+    )
+    plt.show()

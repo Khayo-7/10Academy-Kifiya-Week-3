@@ -20,6 +20,10 @@ def clean_data(data: pd.DataFrame, date_column='Date') -> pd.DataFrame:
     # Remove leading/trailing whitespace in object columns
     data = data.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 
+    # Convert all bool, object, and category columns to string
+    category_cols = data.select_dtypes(include=['bool', 'object', 'category']).columns
+    data[category_cols] = data[category_cols].astype(str)
+
     # Replace missing gender with "Notspecified"
     data['Gender'] = data['Gender'].replace(pd.NA, 'Notspecified')
 
