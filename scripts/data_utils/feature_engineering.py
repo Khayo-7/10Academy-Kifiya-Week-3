@@ -59,15 +59,14 @@ def generate_features(data):
     data = data.copy()
     try:
         # Create a region column from 'Province' and 'PostalCode'
-        data['Region'] = data['Province'] + "_" + data['PostalCode'].astype(str)
+        # data['Region'] = data['Province'] + "_" + data['PostalCode'].astype(str)
 
-        # Create age of the vehicle based on RegistrationYear
-        data['VehicleAge'] = datetime.now().year - data['RegistrationYear'].astype(int)   
-        # Categorize vehicles as New or Old
+        # Create age of the vehicle based on RegistrationYear and Categorize vehicles as New or Old
+        data['VehicleAge'] = datetime.now().year - data['RegistrationYear'].astype(int)
         data["VehicleCondition"] = data["RegistrationYear"].apply(categorize_vehicle_condition)
 
-        data = data.drop(columns=["Province"])
-        data = data.drop(columns=["PostalCode"])
+        # data = data.drop(columns=["Province"])
+        # data = data.drop(columns=["PostalCode"])
         data = data.drop(columns=["RegistrationYear"])
 
     except ValueError as e:
@@ -100,7 +99,7 @@ def generate_time_series_features(data, date_column='Date'):
     data["Day"] = data[date_column].dt.day
     data["DayOfWeek"] = data[date_column].dt.dayofweek
     data["Quarter"] = data[date_column].dt.quarter
-    data['IsWeekend'] = data[date_column].dt.dayofweek.isin([5, 6]) #.astype(int)
+    data['IsWeekend'] = data[date_column].dt.dayofweek.isin([5, 6]).astype(int)
     data = data.drop(columns=[date_column])
 
     return data
